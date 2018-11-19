@@ -1,5 +1,4 @@
 import { BaseType, Selection } from 'd3';
-import { renderDivision } from './renderDivision';
 
 type divisionDataset = string[];
 type dataRow = divisionDataset[];
@@ -18,31 +17,57 @@ type Datum = {
   y: number;
 };
 
+interface Input {
+  id: number;
+  column: string | number;
+  row: string | number;
+  color: string;
+}
+
+const unique = (d: any, i: number, a: any[]) => a.indexOf(d) === i;
+
 export function renderGrid(
   parent: Selection<BaseType, any, any, any>,
-  data: dataRow[]
+  data: Input[]
 ) {
-  const rows = data.length;
-  const columns = data[0].length;
+  const columnUniqueValues = data.map(d => d.column).filter(unique);
+  const rowUniqueValues = data.map(d => d.row).filter(unique);
+
+  const columns = columnUniqueValues.length;
+  const rows = rowUniqueValues.length;
   const cellWidth = width / columns;
   const cellHeight = height / rows;
 
   const newDataset: Datum[] = [];
-  data.forEach((row, rowIndex) => {
-    row.forEach((divisionData, columnIndex) => {
-      const columns = Math.ceil(Math.sqrt(divisionData.length));
 
-      divisionData.forEach((d, groupIndex) => {
-        newDataset.push({
-          fill: d,
-          offsetX: cellWidth * columnIndex,
-          offsetY: cellHeight * rowIndex,
-          x: (groupIndex % columns) * (blockSize + blockPadding),
-          y: Math.floor(groupIndex / columns) * (blockSize + blockPadding)
-        });
-      });
+  interface Dictionary {
+    [Key: string]: number;
+  }
+
+  const groupIndices: Dictionary = {};
+
+  const columnsWithinCell = 5;
+  data.forEach(d => {
+    const columnIndex = columnUniqueValues.indexOf(d.column);
+    const rowIndex = rowUniqueValues.indexOf(d.row);
+    console.log(columnIndex, rowIndex, cellWidth, cellHeight);
+    const key = `${rowIndex}_${columnIndex}`;
+    if (groupIndices.hasOwnProperty(key)) {
+      groupIndices[key] += 1;
+    } else {
+      groupIndices[key] = 1;
+    }
+    const groupIndex = groupIndices[key];
+    newDataset.push({
+      fill: d.color,
+      offsetX: cellWidth * columnIndex,
+      offsetY: cellHeight * rowIndex,
+      x: (groupIndex % columnsWithinCell) * (blockSize + blockPadding),
+      y: Math.floor(groupIndex / columnsWithinCell) * (blockSize + blockPadding)
     });
   });
+
+  console.log(data, newDataset);
 
   const blocksSelection = parent
     .selectAll('rect.divisionBlock')
