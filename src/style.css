@@ -1,0 +1,9 @@
+svg {
+  width: 800px;
+  height: 800px;
+  border: 2px solid #ddd;
+}
+
+rect {
+  fill: green;
+}
