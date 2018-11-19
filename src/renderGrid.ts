@@ -31,7 +31,13 @@ export function renderGrid(
   data: Input[]
 ) {
   const columnUniqueValues = data.map(d => d.column).filter(unique);
-  const rowUniqueValues = data.map(d => d.row).filter(unique);
+  const rowUniqueValues = data
+    .map(d => d.row)
+    .filter(unique)
+    .sort();
+
+  console.log('Rows', rowUniqueValues);
+  console.log('Columns', columnUniqueValues);
 
   const columns = columnUniqueValues.length;
   const rows = rowUniqueValues.length;
