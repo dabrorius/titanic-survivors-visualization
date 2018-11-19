@@ -6,8 +6,8 @@ type dataRow = divisionDataset[];
 const width = 1000;
 const height = 1000;
 
-const blockSize = 24;
-const blockPadding = 5;
+const blockSize = 10;
+const blockPadding = 4;
 
 type Datum = {
   fill: string;
@@ -18,7 +18,7 @@ type Datum = {
 };
 
 interface Input {
-  id: number;
+  id: string;
   column: string | number;
   row: string | number;
   color: string;
@@ -46,7 +46,7 @@ export function renderGrid(
 
   const groupIndices: Dictionary = {};
 
-  const columnsWithinCell = 5;
+  const columnsWithinCell = 20;
   data.forEach(d => {
     const columnIndex = columnUniqueValues.indexOf(d.column);
     const rowIndex = rowUniqueValues.indexOf(d.row);
