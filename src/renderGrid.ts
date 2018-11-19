@@ -56,7 +56,6 @@ export function renderGrid(
   data.forEach(d => {
     const columnIndex = columnUniqueValues.indexOf(d.column);
     const rowIndex = rowUniqueValues.indexOf(d.row);
-    console.log(columnIndex, rowIndex, cellWidth, cellHeight);
     const key = `${rowIndex}_${columnIndex}`;
     if (groupIndices.hasOwnProperty(key)) {
       groupIndices[key] += 1;

@@ -13,6 +13,15 @@ module.exports = {
       {
         test: /\.css/,
         use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.csv$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: { name: '[name].[ext]' }
+          }
+        ]
       }
     ]
   },
